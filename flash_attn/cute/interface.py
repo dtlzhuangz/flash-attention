@@ -723,7 +723,8 @@ def _flash_attn_fwd(
         disable_sparse_kv_bitmask,
         fa_logging.get_fa_log_level(),
     )
-
+    print("compile_key", compile_key)
+    print("compile_key in flash_attn_fwd", compile_key in _flash_attn_fwd.compile_cache)
     if compile_key not in _flash_attn_fwd.compile_cache:
         (
             cu_seqlens_q_tensor,
