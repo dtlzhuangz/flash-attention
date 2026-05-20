@@ -723,8 +723,7 @@ def _flash_attn_fwd(
         disable_sparse_kv_bitmask,
         fa_logging.get_fa_log_level(),
     )
-    print("compile_key", compile_key)
-    print("compile_key in flash_attn_fwd", compile_key in _flash_attn_fwd.compile_cache)
+
     if compile_key not in _flash_attn_fwd.compile_cache:
         (
             cu_seqlens_q_tensor,
@@ -1644,8 +1643,8 @@ def _flash_attn_bwd(
             get_broadcast_dims(v),
             get_broadcast_dims(dout),
             # Prevent TVM stride poisoning when only one block is present.
-            (seqlen_q_rounded // m_block_size == 1),
-            (seqlen_k_rounded // n_block_size == 1),
+            (seqlen_q_rounded // m_block_size == 1).item(),
+            (seqlen_k_rounded // n_block_size == 1).item(),
         )
     else:
         compile_key = (
@@ -1680,8 +1679,8 @@ def _flash_attn_bwd(
             get_broadcast_dims(v),
             get_broadcast_dims(dout),
             # Prevent TVM stride poisoning when only one block is present.
-            (seqlen_q_rounded // m_block_size == 1),
-            (seqlen_k_rounded // n_block_size == 1),
+            (seqlen_q_rounded // m_block_size == 1).item(),
+            (seqlen_k_rounded // n_block_size == 1).item(),
         )
 
     if compile_key not in _flash_attn_bwd.compile_cache:
